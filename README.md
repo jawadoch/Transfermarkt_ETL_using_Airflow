@@ -1,6 +1,9 @@
 # Transfermarkt ETL using Apache Airflow
 
 This project is an Extract, Transform, Load (ETL) pipeline for scraping football transfer data from Transfermarkt using Apache Airflow. The pipeline includes tasks for data retrieval, transformation, and storage in both CSV and MongoDB formats.
+## Project Schema
+
+![Project Schema](Transfermarket_ETL_using_Airflow.jpg)
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
