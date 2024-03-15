@@ -8,8 +8,8 @@ This project is an Extract, Transform, Load (ETL) pipeline for scraping football
 
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
+- [Features](#features)
 - [Project Structure](#project-structure)
-- [Usage](#usage)
 - [Contributing](#contributing)
 
 ## Prerequisites
