@@ -36,7 +36,7 @@ This project is an Extract, Transform, Load (ETL) pipeline for scraping football
    ```bash
    docker-compose up -d
 
-4. **Start the Docker containers:**
+4. **Start to install the dependencies:**
 
    ```bash
    pip install -r requirements.txt
