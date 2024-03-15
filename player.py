@@ -3,6 +3,16 @@ import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 
+class Player:
+    def __init__(self, player, post, age, market_value, nat, joined, league, fee):
+        self.PlayerName = player
+        self.Post = post
+        self.Age = age
+        self.MarketValue = market_value
+        self.Nationality= nat
+        self.TeamJoined = joined
+        self.League = league
+        self.Fee = fee
 
 def get_data(page):
     url=f"https://www.transfermarkt.com/statistik/saisontransfers?ajax=yw0&page={page}"
@@ -13,16 +23,9 @@ def get_data(page):
     soup= BeautifulSoup(page.content, 'html.parser')
     table = soup.find('table', class_='items')
     rows = table.find_all('tr', class_=['odd', 'even'])
-    players=[]
-    posts=[]
-    ages=[]
-    market_values=[]
-    nats=[]
-    joineds=[]
-    leagues=[]
-    fees=[]
+    players = []
     for row in rows:
-        player=row.find_all('td')[1].find('a').text
+        name=row.find_all('td')[1].find('a').text
         post=row.find_all('tr')[1].find('td').text
         age=row.find_all('td')[5].text
         market_value=row.find_all('td')[6].text.replace('€', '').strip()
@@ -30,17 +33,11 @@ def get_data(page):
         joined=row.find_all('td')[8].find_all('a')[0]['title']
         legue=row.find_all('td')[8].find_all('a')[2]['title']
         fee=row.find_all('td')[12].text.replace('€', '').strip()
+        player = Player(name, post, age, market_value, nat, joined, legue, fee)
         players.append(player)
-        posts.append(post)
-        ages.append(age)
-        market_values.append(market_value)
-        nats.append(nat)
-        joineds.append(joined)
-        leagues.append(legue)
-        fees.append(fee)
-    trans={"player":players, "post":posts, "age":ages, "market_value":market_values, "nat":nats, "joined":joineds, "league":leagues, "fee":fees}
-    return pd.DataFrame(trans)
-# Importez ici vos fonctions nécessaires (get_trans, etc.)
+    players = [vars(player) for player in players]
+    df = pd.DataFrame(players)
+    return df
 
 def convertir_valeur(valeur):
     if isinstance(valeur, str):
@@ -58,12 +55,9 @@ def convertir_valeur(valeur):
             try:
                 return float(valeur)
             except ValueError:
-                # En cas d'échec, retourner NaN
                 return valeur
     else:
         return valeur
-
-# Appliquer la fonction à la colonne market_value
 
 
 
@@ -91,12 +85,5 @@ def save_to_mongodb(dataframe):
 
 
 
-
-
-
 def print_done():
     print('done')
-# Spécifiez vos arguments par défaut
-
-if save_to_mongodb(transform(get_trans())) :
-    print_done
